@@ -70,8 +70,7 @@ class ShannonCoding:
         return c
 
     def decode(self, c):
-        """ decode from file """
-
+        """ decode long string """
         a = []
         s = ''
         loc = 0
