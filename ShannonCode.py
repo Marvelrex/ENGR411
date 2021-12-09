@@ -48,7 +48,7 @@ class ShannonCoding:
         self.complement = complement  # In binary
         self.dim = dim  # Dimensional
         self.N = n  # Number of signals
-        self.symbols = symbols  # List of symbols
+        self.RGB = symbols  # List of symbols
         self.P = p  # p(symbol)
         self.cumulative_p = cum_p  # cumulative probability
         self.L = length  # Code length
@@ -56,14 +56,14 @@ class ShannonCoding:
         self.H = hx  # Entropy
         self.I = i  # average code length
         self.K = k  # Coding effiency
-        print(i)
+
     def encode(self, img, path='code.txt'):
         """ Encode to txt file"""
         f = open(path, 'w')
         c = ''
         for point in list(img.flatten()):
             for i in range(self.N):
-                if self.symbols[i] == point:
+                if self.RGB[i] == point:
                     f.write(self.code[i] + " ")
                     c += self.code[i]
         f.close()
@@ -81,7 +81,7 @@ class ShannonCoding:
             if len(s) >= self.L[0]:
                 for i in range(self.N):
                     if self.code[i] == s:
-                        a.append(self.symbols[i])
+                        a.append(self.RGB[i])
                         c = c[loc:]
                         loc = 0
                         s = ''
@@ -96,17 +96,17 @@ class ShannonCoding:
         if self.N > 15:
             for i in range(5):
                 print('{:<10}\t{:<20}\t{:<25}\t{:<10}\t{}'.
-                      format(self.symbols[i], self.P[i], self.cumulative_p[i], self.L[i], self.code[i]))
+                      format(self.RGB[i], self.P[i], self.cumulative_p[i], self.L[i], self.code[i]))
             print('{:<10}\t{:<20}\t{:<25}\t{:<10}\t{}'.
                   format(' ...', ' ...', ' ...', ' ...', ' ...'))
             for i in range(5):
                 print('{:<10}\t{:<20}\t{:<25}\t{:<10}\t{}'.
-                      format(self.symbols[i - 5], self.P[i - 5], self.cumulative_p[i - 5], self.L[i - 5],
+                      format(self.RGB[i - 5], self.P[i - 5], self.cumulative_p[i - 5], self.L[i - 5],
                              self.code[i - 5]))
         else:
             for i in range(self.N):
                 print('{:<10}\t{:<20}\t{:<25}\t{:<10}\t{}'.
-                      format(self.symbols[i], self.P[i], self.cumulative_p[i], self.L[i], self.code[i]))
+                      format(self.RGB[i], self.P[i], self.cumulative_p[i], self.L[i], self.code[i]))
         print('-' * 100)
         print('Coding Efficiency:\t', self.K)
         print('\n\n')
