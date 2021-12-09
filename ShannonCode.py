@@ -1,12 +1,37 @@
 import numpy as np
 import math
 import sys
+from tabulate import tabulate
+
+
+def swap(arr, i, j):
+    temp = arr[i]
+    arr[i] = arr[j]
+    arr[j] = temp
+    return 0
+
+
+def InsertionSort(arr):
+    if len(arr) <= 1:
+        return arr
+    for i in range(1, len(arr + 1), 1):
+        j = i
+        while j > 0:
+            if arr[j] > arr[j - 1]:
+                j -= 1
+                swap(arr, j, j + 1)
+            else:
+                j -= 1
+
+    return arr
 
 
 class ShannonCoding:
     # Take 2 as complement = using bit (base is 2)
     def __init__(self, symbols, p, complement=2, dim=1):
+
         p = np.array(p)
+        symbols = np.array(symbols)
         n = len(p)
 
         if len(symbols) != n:
@@ -14,11 +39,8 @@ class ShannonCoding:
             sys.exit(1)
 
         # Sort as probability order
-        for i in range(n):
-            for j in range(n - i - 1):
-                if p[j] <= p[j + 1]:
-                    p[j], p[j + 1] = p[j + 1], p[j]
-                    symbols[j], symbols[j + 1] = symbols[j + 1], symbols[j]
+        p = InsertionSort(p)
+        symbols = InsertionSort(symbols)
 
         # Calculate Cumulative probability
         cum_p = []
@@ -33,14 +55,14 @@ class ShannonCoding:
         code = []
         for i in range(n):
             single_code = ''
-            t = cum_p[i]
+            prob = cum_p[i]
             for j in range(length[i]):
-                t = t * complement
-                t, z = math.modf(t)
-                single_code += str(int(z))
+                prob = prob * complement
+                prob, whole = math.modf(prob)
+                single_code += str(int(whole))
             code.append(single_code)
 
-        # H(x)
+        # Entropy Average length Efficiency
         hx = np.sum((-1) * np.log2(p) * p)
         i = np.sum(np.array(length) * p) * math.log2(complement) / dim
         k = hx / i
@@ -87,25 +109,10 @@ class ShannonCoding:
                         break
         return np.array(a)
 
-    def print_format(self, describe='Symbols'):
+    def print_format(self):
 
-        print('{:<10}\t{:<20}\t{:<25}\t{:<10}\t{}'.
-              format(describe, 'Probability', 'Cumulative Probability', 'Length', 'Code'))
+        print('Coding Efficiency：%.2f \nEntropy of image:%.2f \n Average Code Length:%.2f' % (self.K, self.H, self.I))
         print('-' * 100)
-        if self.N > 15:
-            for i in range(5):
-                print('{:<10}\t{:<20}\t{:<25}\t{:<10}\t{}'.
-                      format(self.RGB[i], self.P[i], self.cumulative_p[i], self.L[i], self.code[i]))
-            print('{:<10}\t{:<20}\t{:<25}\t{:<10}\t{}'.
-                  format(' ...', ' ...', ' ...', ' ...', ' ...'))
-            for i in range(5):
-                print('{:<10}\t{:<20}\t{:<25}\t{:<10}\t{}'.
-                      format(self.RGB[i - 5], self.P[i - 5], self.cumulative_p[i - 5], self.L[i - 5],
-                             self.code[i - 5]))
-        else:
-            for i in range(self.N):
-                print('{:<10}\t{:<20}\t{:<25}\t{:<10}\t{}'.
-                      format(self.RGB[i], self.P[i], self.cumulative_p[i], self.L[i], self.code[i]))
+        print(tabulate(['RGB', 'Probability', 'Code Length', 'Code'], self.RGB, self.P, self.L, self.code, ))
         print('-' * 100)
-        print('Coding Efficiency:\t', self.K)
         print('\n\n')

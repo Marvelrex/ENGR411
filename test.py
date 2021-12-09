@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import collections
 
 img = data.chelsea()
+height = img.shape[0]
+width = img.shape[1]
 # Count frequency of each point R+G+B/3
 count = collections.Counter(list(img.flatten()))
 # Get the set of counts
@@ -22,15 +24,14 @@ shannon = ShannonCode.ShannonCoding(color, p)
 total_code = shannon.encode(img)
 
 # Get height and width
-height = img.shape[0]
-width = img.shape[1]
+
 
 # Grayscale in coding form
 a = shannon.decode(total_code)
 # Reshape to orignal shape
 a = a.reshape(height, width,3)
 
-shannon.print_format('RGB')
+shannon.print_format()
 
 plt.subplot(121)
 plt.title('Original')
