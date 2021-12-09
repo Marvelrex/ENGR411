@@ -27,11 +27,10 @@ width = img.shape[1]
 
 # Grayscale in coding form
 a = shannon.decode(total_code)
-# 将列表还原为高x宽的矩阵
+# Reshape to orignal shape
 a = a.reshape(height, width,3)
-print(1111)
-shannon.print_format('Gray')
-print('Compression Rate：\t', len(total_code) / (height * width * 8))
+
+shannon.print_format('RGB')
 
 plt.subplot(121)
 plt.title('Original')
