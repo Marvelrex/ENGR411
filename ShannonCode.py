@@ -113,6 +113,6 @@ class ShannonCoding:
 
         print('Coding Efficiency：%.2f \nEntropy of image:%.2f \n Average Code Length:%.2f' % (self.K, self.H, self.I))
         print('-' * 100)
-        print(tabulate(['RGB', 'Probability', 'Code Length', 'Code'], self.RGB, self.P, self.L, self.code, ))
+        print(tabulate([self.RGB, self.P, self.L, self.code,], headers=['RGB', 'Probability', 'Code Length', 'Code']))
         print('-' * 100)
         print('\n\n')
